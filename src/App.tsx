@@ -671,7 +671,7 @@ const Contact = () => {
             Email Me
           </a>
           <div className="flex gap-4">
-            <a href="https://github.com/sessiondb" target="_blank" rel="noopener noreferrer" className="w-14 h-14 border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-all transform hover:skew-x-[-6deg]">
+            <a href="https://github.com/SaimouliBandari" target="_blank" rel="noopener noreferrer" className="w-14 h-14 border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-all transform hover:skew-x-[-6deg]">
               <Github size={24} />
             </a>
             <a href="https://linkedin.com/in/saimouli03" target="_blank" rel="noopener noreferrer" className="w-14 h-14 border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-all transform hover:skew-x-[-6deg]">
