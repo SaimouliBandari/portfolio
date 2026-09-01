@@ -39,10 +39,13 @@ export const ScrambleText: React.FC<ScrambleTextProps> = ({
     const el = ref.current;
     if (!el) return;
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.textContent = text;
-      return;
-    }
+    // Reduce Motion asks for less movement, not less information. Swapping a
+    // glyph in place translates, scales and parallaxes nothing, so it is not
+    // a vestibular trigger and the decode still runs — just shorter, stepped
+    // rather than per-frame, and without the colour flash.
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const runFor = calm ? Math.min(duration, 450) : duration;
+    const glyphHoldMs = calm ? 90 : 0;
 
     const settle = () => {
       el.textContent = text;
@@ -59,14 +62,25 @@ export const ScrambleText: React.FC<ScrambleTextProps> = ({
     let raf = 0;
     let timeout = 0;
     let startedAt: number | null = null;
+    let lastRoll = 0;
     let done = false;
 
     const step = (now: number) => {
       if (startedAt === null) {
         startedAt = now;
-        el.dataset.scrambling = 'true';
+        lastRoll = now;
+        if (!calm) el.dataset.scrambling = 'true';
       }
-      const progress = Math.min((now - startedAt) / duration, 1);
+      const progress = Math.min((now - startedAt) / runFor, 1);
+
+      // Hold each set of glyphs for a beat under Reduce Motion, so it reads as
+      // a handful of discrete steps instead of a per-frame flicker.
+      if (progress < 1 && now - lastRoll < glyphHoldMs) {
+        raf = requestAnimationFrame(step);
+        return;
+      }
+      lastRoll = now;
+
       const revealed = Math.floor(progress * text.length);
 
       let out = '';
