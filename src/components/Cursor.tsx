@@ -24,18 +24,18 @@ export const Cursor: React.FC = () => {
 
     const pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const ring = { x: pos.x, y: pos.y };
+    let lastLabel = '';
 
     const onMove = (e: PointerEvent) => {
       pos.x = e.clientX;
       pos.y = e.clientY;
 
       const el = (e.target as HTMLElement)?.closest?.('[data-cursor]') as HTMLElement | null;
-      if (el) {
-        setActive(true);
-        setLabel(el.dataset.cursor || '');
-      } else {
-        setActive(false);
-        setLabel('');
+      const next = el?.dataset.cursor ?? '';
+      if (next !== lastLabel) {
+        lastLabel = next;
+        setActive(!!el);
+        setLabel(next);
       }
     };
 
@@ -79,7 +79,6 @@ export const Cursor: React.FC = () => {
           height: active ? 78 : 30,
           backgroundColor: active ? 'rgba(122,92,255,0.22)' : 'transparent',
           borderColor: active ? 'rgba(122,92,255,0.75)' : 'rgba(255,255,255,0.35)',
-          backdropFilter: active ? 'blur(2px)' : 'none',
         }}
       >
         <span

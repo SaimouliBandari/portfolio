@@ -53,7 +53,7 @@ const Card: React.FC<{ project: Project; index: number }> = ({ project, index })
 
         {/* Detail slides up over the canvas on hover */}
         <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]">
-          <div className="bg-gradient-to-t from-ink via-ink/95 to-ink/70 backdrop-blur-sm p-5 md:p-6">
+          <div className="bg-gradient-to-t from-ink via-ink/95 to-ink/70 p-5 md:p-6">
             <p className="text-sm text-chalk/75 font-light leading-relaxed">
               {project.detail}
             </p>

@@ -118,8 +118,11 @@ export const FieldBackground: React.FC<{ className?: string }> = ({ className })
     let velocity = 0;
     let lastScrollY = window.scrollY;
 
+    let docHeight = Math.max(1, document.body.scrollHeight - window.innerHeight);
+
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      docHeight = Math.max(1, document.body.scrollHeight - window.innerHeight);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1);
       const w = Math.floor(canvas.clientWidth * dpr);
       const h = Math.floor(canvas.clientHeight * dpr);
       if (canvas.width !== w || canvas.height !== h) {
@@ -146,20 +149,24 @@ export const FieldBackground: React.FC<{ className?: string }> = ({ className })
     document.addEventListener('visibilitychange', onVisibility);
 
     const start = performance.now();
+    const FRAME_MS = 1000 / 60;
+    let lastDraw = 0;
     function render(now: number) {
       if (!running) return;
+      raf = requestAnimationFrame(render);
+      if (now - lastDraw < FRAME_MS) return;
+      lastDraw = now;
       const t = (now - start) / 1000;
 
-      mouse.x += (target.x - mouse.x) * 0.045;
-      mouse.y += (target.y - mouse.y) * 0.045;
+      mouse.x += (target.x - mouse.x) * 0.09;
+      mouse.y += (target.y - mouse.y) * 0.09;
 
       const y = window.scrollY;
       const delta = y - lastScrollY;
       lastScrollY = y;
       // Fast attack, slow release, clamped
       const targetVel = Math.max(-1, Math.min(1, delta / 60));
-      velocity += (targetVel - velocity) * (Math.abs(targetVel) > Math.abs(velocity) ? 0.3 : 0.06);
-      const docHeight = Math.max(1, document.body.scrollHeight - window.innerHeight);
+      velocity += (targetVel - velocity) * (Math.abs(targetVel) > Math.abs(velocity) ? 0.5 : 0.12);
       scroll = y / docHeight;
 
       gl!.useProgram(program);
@@ -169,8 +176,6 @@ export const FieldBackground: React.FC<{ className?: string }> = ({ className })
       gl!.uniform1f(uScroll, scroll);
       gl!.uniform1f(uVelocity, reduced ? 0 : velocity);
       gl!.drawArrays(gl!.TRIANGLES, 0, 3);
-
-      raf = requestAnimationFrame(render);
     }
     raf = requestAnimationFrame(render);
 

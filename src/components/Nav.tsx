@@ -92,7 +92,7 @@ export const Nav: React.FC = () => {
         // z-[60] keeps the bar (and its close button) above the z-[55] menu overlay.
         className={`fixed top-0 left-0 w-full z-[60] px-6 md:px-10 transition-all duration-500 ${
           scrolled && !open
-            ? 'py-3 bg-ink/70 backdrop-blur-xl border-b border-white/8'
+            ? 'py-3 bg-ink/92 border-b border-white/8'
             : 'py-6 border-b border-transparent'
         }`}
       >
@@ -155,7 +155,7 @@ export const Nav: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[55] md:hidden bg-ink/95 backdrop-blur-xl flex flex-col justify-center px-8"
+            className="fixed inset-0 z-[55] md:hidden bg-ink/[0.97] flex flex-col justify-center px-8"
           >
             <nav className="flex flex-col gap-2">
               {LINKS.map((link, i) => (

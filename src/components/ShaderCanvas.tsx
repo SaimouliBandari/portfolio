@@ -192,7 +192,7 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
     const reduced = prefersReducedMotion();
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1);
       const w = Math.max(1, Math.floor(canvas.clientWidth * dpr));
       const h = Math.max(1, Math.floor(canvas.clientHeight * dpr));
       if (canvas.width !== w || canvas.height !== h) {
@@ -206,7 +206,7 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
     resize();
 
     // Only render while the card is actually on screen.
-    let onScreen = true;
+    let onScreen = false;
     let raf = 0;
     let running = false;
 
@@ -237,11 +237,17 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
     document.addEventListener('visibilitychange', onVisibility);
 
     const start = performance.now();
+    const FRAME_MS = 1000 / 30;
+    let lastDraw = 0;
     function render(now: number) {
       if (!running) return;
+      raf = requestAnimationFrame(render);
+      if (now - lastDraw < FRAME_MS) return;
+      lastDraw = now;
       const t = (now - start) / 1000;
 
-      hoverRef.current += (targetHover.current - hoverRef.current) * 0.09;
+      // Per-frame lerp, tuned for the 30fps cap above.
+      hoverRef.current += (targetHover.current - hoverRef.current) * 0.28;
 
       gl!.useProgram(program);
       gl!.uniform2f(uResolution, canvas.width, canvas.height);
@@ -249,10 +255,7 @@ export const ShaderCanvas: React.FC<ShaderCanvasProps> = ({
       gl!.uniform1f(uHover, hoverRef.current);
       gl!.uniform1i(uVariant, variant);
       gl!.drawArrays(gl!.TRIANGLES, 0, 3);
-
-      raf = requestAnimationFrame(render);
     }
-    startLoop();
 
     return () => {
       stopLoop();
