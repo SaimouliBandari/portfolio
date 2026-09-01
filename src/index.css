@@ -62,6 +62,12 @@
     color: transparent;
   }
 
+  /* Still decoding — read the glyphs as machine output, not as copy. */
+  [data-scrambling] {
+    color: var(--color-accent2);
+    -webkit-text-stroke-color: var(--color-accent2);
+  }
+
   .grain-overlay::after {
     content: "";
     position: fixed;

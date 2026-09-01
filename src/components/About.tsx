@@ -7,6 +7,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { TIMELINE } from '../data/content';
 import { SectionHeader } from './SectionHeader';
+import { ScrambleText } from './ScrambleText';
 
 export const About: React.FC = () => (
   <section id="about" className="relative px-6 md:px-10 py-24 md:py-36">
@@ -35,9 +36,13 @@ export const About: React.FC = () => (
                   {entry.year}
                 </span>
 
-                <h3 className="text-xl md:text-2xl font-medium tracking-tight mt-2 mb-3">
-                  {entry.title}
-                </h3>
+                <ScrambleText
+                  text={entry.title}
+                  as="h3"
+                  onView
+                  duration={550}
+                  className="block text-xl md:text-2xl font-medium tracking-tight mt-2 mb-3"
+                />
 
                 <p className="text-muted font-light leading-relaxed max-w-xl">{entry.body}</p>
               </motion.li>

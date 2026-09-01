@@ -7,6 +7,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { CAPABILITIES } from '../data/content';
 import { SectionHeader } from './SectionHeader';
+import { ScrambleText } from './ScrambleText';
 
 export const Capabilities: React.FC = () => (
   <section id="capabilities" className="relative px-6 md:px-10 py-24 md:py-36">
@@ -31,9 +32,14 @@ export const Capabilities: React.FC = () => (
               {String(i + 1).padStart(2, '0')}
             </span>
 
-            <h3 className="text-lg font-medium tracking-tight mb-3 group-hover:text-accent transition-colors duration-300">
-              {cap.title}
-            </h3>
+            <ScrambleText
+              text={cap.title}
+              as="h3"
+              onView
+              duration={500}
+              delay={i * 60}
+              className="text-lg font-medium tracking-tight mb-3 group-hover:text-accent transition-colors duration-300"
+            />
 
             <p className="text-sm text-muted font-light leading-relaxed">{cap.body}</p>
 

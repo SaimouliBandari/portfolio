@@ -12,6 +12,7 @@ import { ArrowUpRight, Github } from 'lucide-react';
 import { PROJECTS, type Project } from '../data/content';
 import { ShaderCanvas } from './ShaderCanvas';
 import { SectionHeader } from './SectionHeader';
+import { ScrambleText } from './ScrambleText';
 
 const Card: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   const [hovered, setHovered] = useState(false);
@@ -73,14 +74,14 @@ const Card: React.FC<{ project: Project; index: number }> = ({ project, index })
                 data-cursor="Open"
                 className="inline-flex items-center gap-2 hover:text-accent transition-colors"
               >
-                {project.title}
+                <ScrambleText text={project.title} onView duration={550} />
                 <ArrowUpRight
                   size={18}
                   className="opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
                 />
               </a>
             ) : (
-              project.title
+              <ScrambleText text={project.title} onView duration={550} />
             )}
           </h3>
           <span className="font-mono text-[11px] text-muted pt-1.5 shrink-0">{project.year}</span>

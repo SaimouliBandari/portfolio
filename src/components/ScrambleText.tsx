@@ -44,6 +44,11 @@ export const ScrambleText: React.FC<ScrambleTextProps> = ({
       return;
     }
 
+    const settle = () => {
+      el.textContent = text;
+      delete el.dataset.scrambling;
+    };
+
     // Note: a whitespace-only placeholder collapses a block element to zero
     // height, and a zero-area target never satisfies an IntersectionObserver
     // threshold. So for the on-view case the real text stays in the DOM until
@@ -57,7 +62,10 @@ export const ScrambleText: React.FC<ScrambleTextProps> = ({
     let done = false;
 
     const step = (now: number) => {
-      if (startedAt === null) startedAt = now;
+      if (startedAt === null) {
+        startedAt = now;
+        el.dataset.scrambling = 'true';
+      }
       const progress = Math.min((now - startedAt) / duration, 1);
       const revealed = Math.floor(progress * text.length);
 
@@ -71,7 +79,7 @@ export const ScrambleText: React.FC<ScrambleTextProps> = ({
       el.textContent = out;
 
       if (progress >= 1) {
-        el.textContent = text;
+        settle();
         done = true;
         return;
       }
@@ -106,7 +114,7 @@ export const ScrambleText: React.FC<ScrambleTextProps> = ({
       clearTimeout(timeout);
       cancelAnimationFrame(raf);
       // Never leave the reader staring at half-decoded glyphs.
-      if (!done) el.textContent = text;
+      if (!done) settle();
     };
   }, [text, delay, duration, onView]);
 

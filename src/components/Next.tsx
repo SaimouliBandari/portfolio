@@ -9,6 +9,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { NEXT, type NextProject } from '../data/content';
 import { SectionHeader } from './SectionHeader';
+import { ScrambleText } from './ScrambleText';
 
 const STATUS_STYLES: Record<NextProject['status'], string> = {
   Shipped: 'text-accent2 border-accent2/40 bg-accent2/10',
@@ -39,9 +40,13 @@ const Row: React.FC<{ item: NextProject; index: number }> = ({ item, index }) =>
       >
         {item.status}
       </span>
-      <h3 className="text-xl md:text-2xl font-medium tracking-tight group-hover:text-accent transition-colors duration-300">
-        {item.title}
-      </h3>
+      <ScrambleText
+        text={item.title}
+        as="h3"
+        onView
+        duration={550}
+        className="text-xl md:text-2xl font-medium tracking-tight group-hover:text-accent transition-colors duration-300"
+      />
       <span className="ml-auto font-mono text-xs text-muted tabular-nums">{item.progress}%</span>
     </div>
 
